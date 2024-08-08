@@ -8,17 +8,38 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var vm = ViewModel()
+    
+    
+    
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Button("Add One") {
+                vm.addOne()
+            }
+            Button("Save Items") {
+                vm.saveItems()
+            }
+            List(vm.items) { item in
+                Text(item.name)
+            }
         }
-        .padding()
+        .task {
+            vm.loadItems()
+        }
     }
+        
+    
+    
+    
+    
+    
+    
 }
 
 #Preview {
     ContentView()
 }
+
