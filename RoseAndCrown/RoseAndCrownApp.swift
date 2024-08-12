@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct RoseAndCrownApp: App {
+    
+    @State private var viewModel = ViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            InitialView()
+                .environment(viewModel)
         }
     }
 }
