@@ -12,3 +12,9 @@ struct BarItem: Identifiable, Codable {
     var name: String
     var price: Decimal
 }
+
+extension BarItem: Comparable {
+    static func < (lhs: BarItem, rhs: BarItem) -> Bool {
+        return lhs.name < rhs.name
+    }
+}

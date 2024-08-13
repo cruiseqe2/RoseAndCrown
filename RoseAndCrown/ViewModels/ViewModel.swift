@@ -14,12 +14,28 @@ class ViewModel {
         case barItems
         case tabItems
         case settings
+        
+        var title: String {
+            switch self {
+            case .barItems:
+                "Bar Items"
+            case .tabItems:
+                "Tab Items"
+            case .settings:
+                "Settings"
+            }
+        }
     }
+    
+    var selectedTab: Tabs = .barItems
+    
+    //================================================================
+    // Bar Items
+    //================================================================
     
     let itemsURL = URL.documentsDirectory.appending(path: "barItems.json")
     
     var barItems: [BarItem] = []
-    var selectedTab: Tabs = .barItems
     
     func loadItems() {
         if FileManager().fileExists(atPath: itemsURL.path) {
@@ -39,6 +55,15 @@ class ViewModel {
             ]
             saveItems()
         }
+    }
+    
+    func removeBarItem(_ item: BarItem) {
+        var indexes = IndexSet()
+        if let index = barItems.firstIndex(of: item) {
+            indexes.insert(index)
+        }
+        barItems.remove(atOffsets: indexes)
+        saveItems()
     }
     
     func saveItems() {

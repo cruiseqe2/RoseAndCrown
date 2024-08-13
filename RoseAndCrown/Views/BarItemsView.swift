@@ -10,12 +10,37 @@ import SwiftUI
 struct BarItemsView: View {
     
     @Environment(ViewModel.self) var vm
+    @State private var isAddSheetShowing = false
     
     var body: some View {
         
-        List(vm.barItems) { barItem in
-            Text(barItem.name)
+        List {
+            ForEach(vm.barItems.sorted()) { barItem in
+                Text(barItem.name)
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            vm.removeBarItem(barItem)
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                    }
+            }
         }
+        .sheet(isPresented: $isAddSheetShowing) {
+            AddBarItemView()
+                .presentationDetents([.height(200)])
+                .interactiveDismissDisabled()
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isAddSheetShowing.toggle()
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        
         
 //        Color.red
 //        VStack {
@@ -35,6 +60,9 @@ struct BarItemsView: View {
 }
 
 #Preview {
-    BarItemsView()
-        .environment(ViewModel())
+    NavigationStack() {
+        BarItemsView()
+            .environment(ViewModel())
+            .navigationTitle("Bar Items")
+    }
 }

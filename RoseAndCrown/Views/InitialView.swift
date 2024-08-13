@@ -4,50 +4,31 @@ struct InitialView: View {
     
     @Environment(ViewModel.self) var vm
     
-    enum Tabs: String {
-        case barItems
-        case tabItems
-        case settings
-        
-        var title: String {
-            switch self {
-            case .barItems:
-                "Bar Items"
-            case .tabItems:
-                "Tab Items"
-            case .settings:
-                "Settings"
-            }
-        }
-    }
-    
-    @State private var selectedTab: Tabs = .tabItems
-    
     var body: some View {
         NavigationStack {
-            TabView(selection: $selectedTab) {
+            TabView(selection: Bindable(vm).selectedTab) {
                 TabItemsView()
                     .tabItem {
                         Label("Tab Items", systemImage: "sterlingsign.circle")
                     }
-                    .tag(Tabs.tabItems)
+                    .tag(ViewModel.Tabs.tabItems)
                 
                 BarItemsView()
                     .tabItem {
                         Label("Bar Items", systemImage: "wineglass")
                     }
-                    .tag(Tabs.barItems)
+                    .tag(ViewModel.Tabs.barItems)
                 
                 SettingsView()
                     .tabItem {
                         Label("Settings", systemImage: "gear")
                     }
-                    .tag(Tabs.settings)
+                    .tag(ViewModel.Tabs.settings)
                 
             }
-            .navigationTitle(selectedTab.title)
+            .navigationTitle(vm.selectedTab.title)
         }
-        .ignoresSafeArea()
+        .ignoresSafeArea(.all)
 //        .padding()
         
         
