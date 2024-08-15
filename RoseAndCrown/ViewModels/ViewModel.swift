@@ -27,6 +27,11 @@ class ViewModel {
         }
     }
     
+    enum Mode: String {
+        case updating
+        case new
+    }
+        
     var selectedTab: Tabs = .barItems
     
     //================================================================
@@ -63,6 +68,11 @@ class ViewModel {
             indexes.insert(index)
         }
         barItems.remove(atOffsets: indexes)
+        saveItems()
+    }
+    
+    func generateNewBarItem(_ item: BarItem) {
+        barItems.append(item)
         saveItems()
     }
     

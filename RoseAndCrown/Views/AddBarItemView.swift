@@ -12,15 +12,20 @@ struct AddBarItemView: View {
     @Environment(ViewModel.self) var vm
     @Environment(\.dismiss) private var dismiss
     
+    @State private var isOn = false
+    @State private var newItem = ""
+    
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.mint.ignoresSafeArea()
-                VStack {
-                    Text("Add Bar Item View")
+            Form {
+                Toggle(isOn: $isOn) {
+                    Text("Toggle")
                 }
-                .padding(50)
+                TextField("Enter Bar Item Name", text: $newItem)
+                    .textFieldStyle(.roundedBorder)
             }
+            .navigationTitle("Add new Bar Item")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
@@ -31,6 +36,7 @@ struct AddBarItemView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
+                        validateAndSave()
                         dismiss()
                     } label: {
                         Text("Save")
@@ -38,10 +44,15 @@ struct AddBarItemView: View {
                 }
             }
         }
+        
+    }
+    func validateAndSave() {
+        let newBarItem = BarItem(name: newItem, price: 0.99)
+        vm.generateNewBarItem(newBarItem)
     }
 }
 
-#Preview {
-    AddBarItemView()
-        .environment(ViewModel())
-}
+//#Preview {
+//    AddBarItemView()
+//        .environment(ViewModel())
+//}
