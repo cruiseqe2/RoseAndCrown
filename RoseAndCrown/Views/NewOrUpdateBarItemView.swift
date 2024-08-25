@@ -20,20 +20,27 @@ struct NewOrUpdateBarItemView: View {
     
     var barItem: BarItem?
     
-    @State private var isOn = false
+    @State private var produceError = false
     @State private var mode: ViewModel.Mode = .new
     @State private var newItemName = ""
     @State private var newItemPriceString = ""
+    @State private var showAlert = false
+    private var saveDisabled: Bool {
+        newItemName.isEmpty || newItemPriceString.isEmpty
+    }
+    
     
     var body: some View {
         NavigationStack {
             Form {
-                Toggle(isOn: $isOn) {
-                    Text("Toggle")
+                Toggle(isOn: $produceError) {
+                    Text("Produce Error")
                 }
                 
                 TextField("Enter Bar Item Name", text: $newItemName)
                     .textFieldStyle(.roundedBorder)
+                    .keyboardType(.alphabet)
+                    .autocorrectionDisabled()
                 TextField("Enter Bar Item Price", text: $newItemPriceString)
                     .focused($focusedField, equals: .decimal)
                     .decimalsOnly($newItemPriceString, decimalPlaces: 2)
@@ -52,11 +59,25 @@ struct NewOrUpdateBarItemView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-//                        validateAndSave()
-                        dismiss()
+//                        print(newItemPriceString, newItemPriceString.convertedToInt())
+//                        print(Double(newItemPriceString) ?? 1.0)
+//                        print((Double(newItemPriceString) ?? 1.0) * 100.00)
+//                        print(((Double(newItemPriceString) ?? 1.0) * 100.00).rounded())
+                        let uuid = mode == .updating ? barItem?.id : nil
+                        if vm.isBarItemEntryValid(uuid: uuid, name: newItemName, priceInPence: newItemPriceString.convertedToInt()) {
+                            if mode == .new {
+                                vm.generateNewBarItem(BarItem(name: newItemName, priceInPence: newItemPriceString.convertedToInt()))
+                            } else {
+//                                vm.generateNewBarItem(<#T##item: BarItem##BarItem#>)
+                            }
+                            dismiss()
+                        } else {
+                            showAlert.toggle()
+                        }
                     } label: {
-                        Text("Save")
+                        Text(mode == .updating ? "Update" : "Save")
                     }
+                    .disabled(saveDisabled)
                 }
                 if focusedField != nil {
                     ToolbarItemGroup(placement: .keyboard) {
@@ -72,10 +93,10 @@ struct NewOrUpdateBarItemView: View {
             }
         }
         .onAppear {
+            UITextField.appearance().clearButtonMode = .whileEditing
             if let barItem {
                 newItemName = barItem.name
-//                newItemPriceString = String(barItem.price)
-//                newItemPrice = 5.60
+                newItemPriceString = barItem.priceInPence.convertedToString()
                 mode = .updating
             } else {
                 newItemName = ""
@@ -83,12 +104,16 @@ struct NewOrUpdateBarItemView: View {
                 mode = .new
             }
         }
+        .alert(
+            "‼️ Oooops ‼️",
+            isPresented: $showAlert,
+            presenting: vm.alertText,
+            actions: { _ in },
+            message: { alertText in
+                Text(alertText)
+            }
+        )
     }
-    
-    //    func validateAndSave() {
-    //        let newBarItem = BarItem(name: newItem, price: 0.99)
-    //        vm.generateNewBarItem(newBarItem)
-    //    }
 }
 
 //#Preview {

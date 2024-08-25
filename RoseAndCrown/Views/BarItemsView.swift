@@ -53,17 +53,6 @@ struct BarItemsView: View {
                 }
             }
         }
-        
-        
-        // VStack {
-        //            Button("Add One") {
-        //                vm.addOne()
-        //            }
-        //            Button("Save Items") {
-        //                vm.saveItems()
-        //            }
-        
-        
     }
     
     private func swipeIcon(label: String, symbolName: String) -> some View {
@@ -99,9 +88,7 @@ struct BarItemsView: View {
         .minimumScaleFactor(0.7)
         .multilineTextAlignment(.center)
     }
-
 }
-
 
 #Preview {
     NavigationStack() {

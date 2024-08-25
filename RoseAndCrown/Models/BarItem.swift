@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct BarItem: Identifiable, Codable {
+struct BarItem: Identifiable, Codable, Hashable {
     var id: UUID = UUID()
     var name: String
-    var price: Decimal
+    var priceInPence: Int
 }
 
 extension BarItem: Comparable {

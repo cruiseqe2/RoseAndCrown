@@ -3,6 +3,8 @@ import SwiftUI
 struct InitialView: View {
     
     @Environment(ViewModel.self) var vm
+    @State private var isAlertShowing = false
+    @State private var myError: AppError = AppError.null
     
     var body: some View {
         NavigationStack {
@@ -29,28 +31,21 @@ struct InitialView: View {
             .navigationTitle(vm.selectedTab.title)
         }
         .ignoresSafeArea(.all)
-//        .padding()
-        
-        
-        
-        
-        
-//        VStack {
-//            Button("Add One") {
-//                vm.addOne()
-//            }
-//            Button("Save Items") {
-//                vm.saveItems()
-//            }
-//            List(vm.barItems) { barItem in
-//                Text(barItem.name)
-//            }
-//        }
         .task {
-            vm.loadItems()
+            do {
+                try vm.loadItems()
+            } catch {
+                myError = AppError.decodingError
+                isAlertShowing = true
+            }
+            vm.selectedTab = (vm.barItems.isEmpty ? .barItems : .tabItems)
+        }
+        .alert(isPresented: $isAlertShowing, error: myError) { error in
+            // Buttons, if any, go here! OK is the default button.
+        } message: { error in
+            Text(error.failureReason)
         }
     }
-    
 }
 
 #Preview {

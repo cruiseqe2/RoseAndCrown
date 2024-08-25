@@ -25,8 +25,7 @@ struct NumberOnlyViewModifier: ViewModifier {
                 }
                 let array = newValue.components(separatedBy: decimalSeparator)
                 if array.count > 2 ||
-                    (array.count == 2 && array[1].count > decimalPlaces)
-                {
+                    (array.count == 2 && array[1].count > decimalPlaces) {
                     let filtered = newValue
                     self.text = String(filtered.dropLast())
                 } else {

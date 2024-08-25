@@ -17,9 +17,10 @@
 		65634FD52C65746900145B7C /* BarItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65634FD42C65746900145B7C /* BarItemsView.swift */; };
 		65634FD72C65748200145B7C /* TabItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65634FD62C65748200145B7C /* TabItemsView.swift */; };
 		65634FF92C697D8500145B7C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65634FF82C697D8500145B7C /* SettingsView.swift */; };
-		65634FFB2C6B77B900145B7C /* AddBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65634FFA2C6B77B900145B7C /* AddBarItemView.swift */; };
 		65634FFD2C6D17EF00145B7C /* NewOrUpdateBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65634FFC2C6D17EF00145B7C /* NewOrUpdateBarItemView.swift */; };
 		656350002C6D5BB300145B7C /* NumberOnlyViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65634FFF2C6D5BB300145B7C /* NumberOnlyViewModifier.swift */; };
+		656350022C6D886400145B7C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656350012C6D886400145B7C /* Extensions.swift */; };
+		656350072C6F526B00145B7C /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656350062C6F526B00145B7C /* AppError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,9 +35,10 @@
 		65634FD42C65746900145B7C /* BarItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarItemsView.swift; sourceTree = "<group>"; };
 		65634FD62C65748200145B7C /* TabItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabItemsView.swift; sourceTree = "<group>"; };
 		65634FF82C697D8500145B7C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		65634FFA2C6B77B900145B7C /* AddBarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBarItemView.swift; sourceTree = "<group>"; };
 		65634FFC2C6D17EF00145B7C /* NewOrUpdateBarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOrUpdateBarItemView.swift; sourceTree = "<group>"; };
 		65634FFF2C6D5BB300145B7C /* NumberOnlyViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberOnlyViewModifier.swift; sourceTree = "<group>"; };
+		656350012C6D886400145B7C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		656350062C6F526B00145B7C /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				65634FD12C656BE800145B7C /* ViewModels */,
 				65634FD02C656BD900145B7C /* Views */,
 				65634FFE2C6D4EAD00145B7C /* Helpers */,
+				656350052C6F523300145B7C /* ErrorHandling */,
 				654706272C62F22A0046A442 /* Assets.xcassets */,
 				654706292C62F22A0046A442 /* Preview Content */,
 			);
@@ -102,7 +105,6 @@
 			children = (
 				65634FD22C65726D00145B7C /* InitialView.swift */,
 				65634FD42C65746900145B7C /* BarItemsView.swift */,
-				65634FFA2C6B77B900145B7C /* AddBarItemView.swift */,
 				65634FFC2C6D17EF00145B7C /* NewOrUpdateBarItemView.swift */,
 				65634FD62C65748200145B7C /* TabItemsView.swift */,
 				65634FF82C697D8500145B7C /* SettingsView.swift */,
@@ -122,8 +124,17 @@
 			isa = PBXGroup;
 			children = (
 				65634FFF2C6D5BB300145B7C /* NumberOnlyViewModifier.swift */,
+				656350012C6D886400145B7C /* Extensions.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		656350052C6F523300145B7C /* ErrorHandling */ = {
+			isa = PBXGroup;
+			children = (
+				656350062C6F526B00145B7C /* AppError.swift */,
+			);
+			path = ErrorHandling;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,12 +212,13 @@
 				654706322C636FCC0046A442 /* ViewModel.swift in Sources */,
 				65634FCD2C656ABE00145B7C /* TabItem.swift in Sources */,
 				65634FD52C65746900145B7C /* BarItemsView.swift in Sources */,
+				656350022C6D886400145B7C /* Extensions.swift in Sources */,
 				65634FFD2C6D17EF00145B7C /* NewOrUpdateBarItemView.swift in Sources */,
 				65634FD72C65748200145B7C /* TabItemsView.swift in Sources */,
+				656350072C6F526B00145B7C /* AppError.swift in Sources */,
 				654706242C62F2290046A442 /* RoseAndCrownApp.swift in Sources */,
 				65634FD32C65726D00145B7C /* InitialView.swift in Sources */,
 				656350002C6D5BB300145B7C /* NumberOnlyViewModifier.swift in Sources */,
-				65634FFB2C6B77B900145B7C /* AddBarItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
