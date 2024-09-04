@@ -9,44 +9,49 @@ import SwiftUI
 
 struct NewOrUpdateBarItemView: View {
     
-    enum FocusedField {
-        case decimal
-        case integer
-    }
-    @FocusState private var focusedField: FocusedField?
-    
     @Environment(ViewModel.self) var vm
     @Environment(\.dismiss) private var dismiss
+    @FocusState var fieldInFocus: FieldInFocus?
     
-    var barItem: BarItem?
+    var barItem: BarItem? 
     
     @State private var produceError = false
-    @State private var mode: ViewModel.Mode = .new
+    @State private var mode: Mode = .new
     @State private var newItemName = ""
     @State private var newItemPriceString = ""
     @State private var showAlert = false
     private var saveDisabled: Bool {
         newItemName.isEmpty || newItemPriceString.isEmpty
     }
-    
+    private var allButtonsDisabled: Bool {
+        fieldInFocus != nil
+    }
     
     var body: some View {
+        @Bindable var vm = vm
         NavigationStack {
             Form {
                 Toggle(isOn: $produceError) {
                     Text("Produce Error")
                 }
                 
-                TextField("Enter Bar Item Name", text: $newItemName)
-                    .textFieldStyle(.roundedBorder)
+                TextField(vm.BIPlacerholderDescription, text: $newItemName)
+                    .focused($fieldInFocus, equals: .description)
+//                    .textFieldStyle(.roundedBorder)
                     .keyboardType(.alphabet)
                     .autocorrectionDisabled()
-                TextField("Enter Bar Item Price", text: $newItemPriceString)
-                    .focused($focusedField, equals: .decimal)
-                    .decimalsOnly($newItemPriceString, decimalPlaces: 2)
-                    .textFieldStyle(.roundedBorder)
+                
+                BarItemPriceView(field: $newItemPriceString)
+            
+//                TextField("Enter Bar Item Price", text: $newItemPriceString)
+//                    .focused($focusedField, equals: .decimal)
+//                    .decimalsOnly($newItemPriceString, decimalPlaces: 2)
+//                    .textFieldStyle(.roundedBorder)
+                
                 
             }
+            .background()
+            .syncFocusStates(focusState: $fieldInFocus, with: $vm.fieldInFocus)
             .navigationTitle(mode == .updating ? "Edit Bar Item" : "New Bar Item")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -56,19 +61,20 @@ struct NewOrUpdateBarItemView: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .disabled(allButtonsDisabled)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-//                        print(newItemPriceString, newItemPriceString.convertedToInt())
-//                        print(Double(newItemPriceString) ?? 1.0)
-//                        print((Double(newItemPriceString) ?? 1.0) * 100.00)
-//                        print(((Double(newItemPriceString) ?? 1.0) * 100.00).rounded())
+                        //                        print(newItemPriceString, newItemPriceString.asInt())
+                        //                        print(Double(newItemPriceString) ?? 1.0)
+                        //                        print((Double(newItemPriceString) ?? 1.0) * 100.00)
+                        //                        print(((Double(newItemPriceString) ?? 1.0) * 100.00).rounded())
                         let uuid = mode == .updating ? barItem?.id : nil
-                        if vm.isBarItemEntryValid(uuid: uuid, name: newItemName, priceInPence: newItemPriceString.convertedToInt()) {
+                        if vm.isBarItemEntryValid(uuid: uuid, name: newItemName, priceInPence: newItemPriceString.asInt()) {
                             if mode == .new {
-                                vm.generateNewBarItem(BarItem(name: newItemName, priceInPence: newItemPriceString.convertedToInt()))
+                                vm.generateNewBarItem(BarItem(name: newItemName, priceInPence: newItemPriceString.asInt()))
                             } else {
-//                                vm.generateNewBarItem(<#T##item: BarItem##BarItem#>)
+                                //                                vm.generateNewBarItem(<#T##item: BarItem##BarItem#>)
                             }
                             dismiss()
                         } else {
@@ -77,26 +83,27 @@ struct NewOrUpdateBarItemView: View {
                     } label: {
                         Text(mode == .updating ? "Update" : "Save")
                     }
-                    .disabled(saveDisabled)
+                    .disabled(saveDisabled || allButtonsDisabled)
                 }
-                if focusedField != nil {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Spacer()
-                        Button {
-                            focusedField = nil
-                        } label: {
-                            Image(systemName: "keyboard.chevron.compact.down")
-                        }
-                    }
-                }
+//                    ToolbarItemGroup(placement: .keyboard) {
+//                        if focusedField != nil && focusedField != .alpha {
+//                        Spacer()
+//                        Button {
+//                            focusedField = nil
+//                        } label: {
+//                            Image(systemName: "keyboard.chevron.compact.down")
+//                        }
+//                    }
+//                }
                 
             }
         }
+
         .onAppear {
-            UITextField.appearance().clearButtonMode = .whileEditing
+//            UITextField.appearance().clearButtonMode = .whileEditing
             if let barItem {
                 newItemName = barItem.name
-                newItemPriceString = barItem.priceInPence.convertedToString()
+                newItemPriceString = barItem.priceInPence.asString()
                 mode = .updating
             } else {
                 newItemName = ""

@@ -6,36 +6,23 @@
 //
 
 import Foundation
+import SwiftUI
 
 @Observable
 class ViewModel {
     
-    enum Tabs: String {
-        case barItems
-        case tabItems
-        case settings
+    var displayMode: DisplayMode = .system
+    var darkMode: Bool = false
+    var systemMode: Bool = false
         
-        var title: String {
-            switch self {
-            case .barItems:
-                "Bar Items"
-            case .tabItems:
-                "Tab Items"
-            case .settings:
-                "Settings"
-            }
-        }
-    }
     
-    enum Mode: String {
-        case updating
-        case new
-    }
+    
+    
 
 //    var systemAppError: SystemErrorType? = nil
     var alertText = ""
     
-    var selectedTab: Tabs = .barItems
+    var selectedTab: Tabs = .settings
     
     //================================================================
     // Bar Items
@@ -44,6 +31,10 @@ class ViewModel {
     let itemsURL = URL.documentsDirectory.appending(path: "barItems.json")
     
     var barItems: [BarItem] = []
+    var isBarItemsNewOrUpdateSheetShowing = false
+    
+    var BIPlacerholderDescription = "Item Name"
+    var BIPlaceholderPrice = "Item Price"
     
     func loadItems() throws {
 //        if 2 == 2 { throw AppError.decodingError}
@@ -58,14 +49,7 @@ class ViewModel {
                 //print(error.localizedDescription)
             }
         }
-        
-//        if barItems.isEmpty {
-//            barItems = [
-//                BarItem(name: "Crisps", priceInPence: 120),
-//                BarItem(name: "Diet Coke", priceInPence: 405)
-//            ]
-//            saveItems()
-//        }
+        //print(barItems)
     }
     
     func removeBarItem(_ item: BarItem) {
@@ -126,19 +110,37 @@ class ViewModel {
             } else {
                 return true
             }
-            
-            
-            
-            
         }
         
+    }
+    
+    //================================================================
+    // Custom Keyboard Stuff
+    //================================================================
+   
+    var fieldInFocus: FieldInFocus?
         
-        
-        
-        
-        
-        
-//        return true
+    /// Keyboard Button View
+    func KeyboardButtonView(_ value: KeyboardButtonType, color: Color = .white, onTap: @escaping () -> ()) -> some View {
+        Button(action: onTap) {
+            ZStack {
+                switch value {
+                case .text(let string):
+                    Text(string)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                case .image(let image):
+                    Image(systemName: image)
+                        .font(color == .white ? .title2 : .title)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(color)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 15)
+            .contentShape(Rectangle())
+        }
     }
     
 }

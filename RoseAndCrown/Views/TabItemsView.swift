@@ -13,11 +13,15 @@ struct TabItemsView: View {
     
     var body: some View {
         Color.green
+            .navigationTitle(vm.selectedTab.title)
 //        Text("Tab Items View")
     }
 }
 
 #Preview {
-    TabItemsView()
-        .environment(ViewModel())
+    NavigationStack() {
+        TabItemsView()
+            .environment(ViewModel())
+            .navigationTitle("Tab Items")
+    }
 }

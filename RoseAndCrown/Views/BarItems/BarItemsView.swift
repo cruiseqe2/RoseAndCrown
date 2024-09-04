@@ -10,31 +10,42 @@ import SwiftUI
 struct BarItemsView: View {
     
     @Environment(ViewModel.self) var vm
-    @State private var isAddSheetShowing = false
-    
     @State private var selectedBarItem: BarItem?
     
     var body: some View {
-        
+        @Bindable var vm = vm
         List {
             ForEach(vm.barItems.sorted()) { barItem in
-                Text(barItem.name)
-                    .swipeActions(allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                            vm.removeBarItem(barItem)
-                        } label: {
-                            swipeIcon(label: "Delete", symbolName: "trash")
-                        }
-                        Button() {
-                            selectedBarItem = barItem
-                        } label: {
-                            swipeIcon(label: "Edit", symbolName: "pencil")
-                        }
-                        .tint(.green)
+                HStack {
+                    Text(barItem.name)
+                    Spacer()
+                    Text(barItem.priceInPence.asString())
+                        .monospaced()
+                }
+                .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                    Button() {
+                        selectedBarItem = barItem
+                    } label: {
+                        swipeIcon(label: "Edit", symbolName: "pencil")
                     }
+                }
+                .tint(.green)
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button(role: .destructive) {
+                        vm.removeBarItem(barItem)
+                    } label: {
+                        swipeIcon(label: "Delete", symbolName: "trash")
+                    }
+                }
             }
         }
-        .sheet(isPresented: $isAddSheetShowing) {
+        .navigationTitle(vm.selectedTab.title)
+        .overlay {
+            if vm.barItems.isEmpty {
+                ContentUnavailableView("No Bar Items Yet", systemImage: "trash")
+            }
+        }
+        .sheet(isPresented: $vm.isBarItemsNewOrUpdateSheetShowing) {
             NewOrUpdateBarItemView()
                 .presentationDetents([.medium])
                 .interactiveDismissDisabled()
@@ -44,15 +55,6 @@ struct BarItemsView: View {
                 .presentationDetents([.medium])
                 .interactiveDismissDisabled()
         })
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isAddSheetShowing.toggle()
-                } label: {
-                    Label("New Item", systemImage: "plus")
-                }
-            }
-        }
     }
     
     private func swipeIcon(label: String, symbolName: String) -> some View {
@@ -94,6 +96,6 @@ struct BarItemsView: View {
     NavigationStack() {
         BarItemsView()
             .environment(ViewModel())
-            .navigationTitle("Bar Items")
+            .navigationTitle("Bar Items View")
     }
 }
